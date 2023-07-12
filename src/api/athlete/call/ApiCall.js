@@ -35,8 +35,8 @@ export default class ApiCall extends CallBase {
    * @return {Promise} Returns the result of the Ajax call promise
    * @memberof ApiCall
    */
-  static get(tokenAPI, path, queryParams) {
-    return ApiCall._innerCall('GET', path, queryParams, undefined, ApiCall._generateHeader(tokenAPI));
+  static get(/*tokenAPI,*/ path, queryParams) {
+    return ApiCall._innerCall('GET', path, queryParams, undefined/*, ApiCall._generateHeader(tokenAPI)*/);
   }
 
   /**
@@ -49,8 +49,22 @@ export default class ApiCall extends CallBase {
    * @return {Promise} Returns the result of the Ajax call promise
    * @memberof ApiCall
    */
-  static post(tokenAPI, path, queryParams, body) {
-    return ApiCall._innerCall('POST', path, queryParams, body, ApiCall._generateHeader(tokenAPI));
+  static post(/*tokenAPI,*/ path, queryParams, body) {
+    return ApiCall._innerCall('POST', path, queryParams, body/*, ApiCall._generateHeader(tokenAPI)*/);
+  }
+
+  /**
+   * Method representing a PUT call to the Api
+   *
+   * @param {String} tokenAPI api access token
+   * @param {String} path Url destination of the call
+   * @param {Object} queryParams Object with the key pairs value of the parameters of the querystring
+   * @param {Object} body = Object containing the key pairs value of the request body
+   * @return {Promise} Returns the result of the Ajax call promise
+   * @memberof ApiCall
+   */
+  static put(/*tokenAPI,*/ path, queryParams, body) {
+    return ApiCall._innerCall('PUT', path, queryParams, body/*, ApiCall._generateHeader(tokenAPI)*/);
   }
 
   /**
@@ -63,8 +77,8 @@ export default class ApiCall extends CallBase {
    * @return {Promise} Returns the result of the Ajax call promise
    * @memberof ApiCall
    */
-  static patch(tokenAPI, path, queryParams, body) {
-    return ApiCall._innerCall('PATCH', path, queryParams, body, ApiCall._generateHeader(tokenAPI));
+  static patch(/*tokenAPI,*/ path, queryParams, body) {
+    return ApiCall._innerCall('PATCH', path, queryParams, body/*, ApiCall._generateHeader(tokenAPI)*/);
   }
 
   /**
