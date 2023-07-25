@@ -31,10 +31,10 @@ export default {
     },
     methods: {
         saveData(data){
-            const userId = this.$store.getters['getUserId'];
             const athleteData = {
                 firstName: data.first,
                 lastName: data.last,
+                email: data.email,
                 typeCourses: data.typeCourses,
                 description:data.desc,
                 age: data.age
@@ -42,13 +42,13 @@ export default {
             //Llamada al servicio back para registrar el athleta
             const basePath = 'https://pj-vue-athlete-back-default-rtdb.europe-west1.firebasedatabase.app/'
             this.isLoading = true;
-            this.registerAthlete(basePath, userId, athleteData)
-                .then(() => {
-                    // console.log('respuesta al registrar', response);
+            const token = this.$store.getters['auth/getToken'];
+            this.registerAthlete(token, basePath, athleteData)
+                .then((response) => {
                     this.$store.commit('athletes/setAthletesList', 
                         {
                             ...athleteData,
-                            id: userId
+                            id: response.data.name
                         });
                 })
                 .catch(error => {

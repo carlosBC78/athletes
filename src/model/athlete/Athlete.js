@@ -23,5 +23,6 @@ export default class Athlete{
         this.age = serverData.age;
         this.description = serverData.description;
         this.typeCourses = serverData.typeCourses;
+        this.email = serverData.email;
     }
 }

@@ -22,7 +22,7 @@ export default class ApiCall extends CallBase {
     if (tokenAPI) {
       headers.Authorization = `Bearer ${tokenAPI}`;
     }
-
+    
     return headers;
   }
 
@@ -35,8 +35,8 @@ export default class ApiCall extends CallBase {
    * @return {Promise} Returns the result of the Ajax call promise
    * @memberof ApiCall
    */
-  static get(/*tokenAPI,*/ path, queryParams) {
-    return ApiCall._innerCall('GET', path, queryParams, undefined/*, ApiCall._generateHeader(tokenAPI)*/);
+  static get(tokenAPI, path, queryParams) {
+    return ApiCall._innerCall('GET', path, queryParams, undefined, ApiCall._generateHeader(tokenAPI));
   }
 
   /**
@@ -49,8 +49,8 @@ export default class ApiCall extends CallBase {
    * @return {Promise} Returns the result of the Ajax call promise
    * @memberof ApiCall
    */
-  static post(/*tokenAPI,*/ path, queryParams, body) {
-    return ApiCall._innerCall('POST', path, queryParams, body/*, ApiCall._generateHeader(tokenAPI)*/);
+  static post(tokenAPI, path, queryParams, body) {
+    return ApiCall._innerCall('POST', path, queryParams, body, ApiCall._generateHeader(tokenAPI));
   }
 
   /**
@@ -63,8 +63,8 @@ export default class ApiCall extends CallBase {
    * @return {Promise} Returns the result of the Ajax call promise
    * @memberof ApiCall
    */
-  static put(/*tokenAPI,*/ path, queryParams, body) {
-    return ApiCall._innerCall('PUT', path, queryParams, body/*, ApiCall._generateHeader(tokenAPI)*/);
+  static put(tokenAPI, path, queryParams, body) {
+    return ApiCall._innerCall('PUT', path, queryParams, body, ApiCall._generateHeader(tokenAPI));
   }
 
   /**

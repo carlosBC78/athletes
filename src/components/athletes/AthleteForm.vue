@@ -16,6 +16,13 @@
                 <p class="athlete-form--control-invalid--message" v-if="!lastName.isValid">El campo 'Apellidos' no puede estar vacío.</p>
             </div>
             <div class="athlete-form--control"
+              :class="{'athlete-form--control-invalid' : !email.isValid}">
+                <label for="lastName">Correo electrónico</label>
+                <input type="text" id="email" v-model.trim="email.val"
+                  @blur="clearValidity('email')"/>
+                <p class="athlete-form--control-invalid--message" v-if="!email.isValid">El campo 'Correo electrónico' no es válido.</p>
+            </div>
+            <div class="athlete-form--control"
               :class="{'athlete-form--control-invalid' : !description.isValid}">
                 <label for="description">Descripción</label>
                 <textarea id="description" rows="5" v-model.trim="description.val" 
@@ -56,6 +63,7 @@
 </template>
 
 <script>
+
 export default {
     emits: ['save-data'],
     data(){
@@ -70,6 +78,9 @@ export default {
               val: '', isValid: true
             },
             lastName: {
+              val: '', isValid: true
+            },
+            email: {
               val: '', isValid: true
             },
             description: {
@@ -98,6 +109,11 @@ export default {
           this.lastName.isValid = false;
           this.formIsValid = false;
         }
+        const validateEmail = /^[^@]+@\w+(\.\w+)+\w$/;
+        if(!validateEmail.test(this.email.val)){
+          this.email.isValid = false;
+          this.formIsValid = false;
+        }
         if(this.description.val === ''){
           this.description.isValid = false;
           this.formIsValid = false;
@@ -120,6 +136,7 @@ export default {
         const formData = {
             first: this.firstName.val,
             last: this.lastName.val,
+            email: this.email.val,
             desc: this.description.val,
             age: this.age.val,
             typeCourses: this.typeCourses.val
@@ -154,6 +171,7 @@ textarea {
   width: 100%;
   border: 1px solid #ccc;
   font: inherit;
+  padding: 5px;
 }
 
 input:focus,

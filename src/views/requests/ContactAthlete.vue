@@ -74,7 +74,6 @@ export default {
           this.isLoading = true;
           this.registerRequest(basePath, this.$route.params.id, newRequest)
             .then((response) => {
-                // console.log('registro de mensaje', response);
                 newRequest.id = response.data.name;
                 newRequest.athleteId = this.$route.params.id
                 this.$store.commit('requests/addRequest', newRequest);

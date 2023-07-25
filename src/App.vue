@@ -11,11 +11,16 @@
 
 <script>
 import HeaderApp from '../src/components/layout/HeaderApp.vue';
+import authService from './mixins/services/auth';
 
 export default {
   name: 'App',
   components: {
     HeaderApp
+  },
+  mixins: [authService],
+  created(){
+    this.tryLogin();
   }
 }
 </script>

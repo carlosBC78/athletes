@@ -9,7 +9,8 @@
     <base-card>
       <div class="athletes-list--controls">
         <base-button mode="outline" @click="initAthletesList(true)">Refrescar</base-button>
-        <base-button v-if="!isAthleteRegister && !isLoading" link to="/register">Registrar</base-button>
+        <base-button link to="/auth?redirect=register" v-if="!isLoggedIn && registerAthletes">Entrar para registrarse como atleta</base-button>
+        <base-button v-if="!isAthleteRegister && !isLoading && isLoggedIn && registerAthletes" link to="/register">Registrarse como atleta</base-button>
       </div>
       <div v-if="isLoading">
         <base-spinner></base-spinner>
@@ -53,6 +54,9 @@ export default {
       }
   },  
   computed: {
+    isLoggedIn(){
+      return this.$store.getters['auth/isAuthenticated'];
+    },
     athletesListComp(){
       return this.athletesList.filter(ath => {
         if(this.activeFilters.ruta && ath.typeCourses && ath.typeCourses.includes('ruta')){
@@ -71,8 +75,13 @@ export default {
       return !this.isLoading && this.$store.getters['athletes/hasAthletes'];
     },
     isAthleteRegister(){
-        const userId = this.$store.getters['getUserId'];
-        return this.athletesList.some(ath => ath.id === userId)
+        const email = this.$store.getters['auth/getEmail'];
+        // console.log(email, this.athletesList);
+        return this.athletesList.some(ath => ath.email === email);
+    },
+    registerAthletes(){
+      //Cambiar a valor true en el caso que activemos darse de alta a otros atletas
+      return false;
     }
   },
   created(){
@@ -96,8 +105,10 @@ export default {
       // const response = await fetch(`${basePath}athletes.json`);
       // const responseData = await response.json();
       
+      // const userId = this.$store.getters['auth/getUserId'];
+      // const token = this.$store.getters['auth/getToken'];
       this.isLoading = true;
-      this.loadAthletesList(basePath)
+      this.loadAthletesList(null, basePath/*, userId*/)
         .then(() => {
           this.athletesList = this.$store.getters['athletes/getAthletesList'];
         })

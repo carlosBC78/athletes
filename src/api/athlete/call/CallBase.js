@@ -23,11 +23,12 @@ export default class CallBase {
         config.body = JSON.stringify(body);
       }
       if (queryParams) {
-        url = `${url}?`;
-        Object.keys(queryParams).forEach(key => url = `${url}&${key}=${queryParams[key]}`);
-        url = url.replace('?&', '?');
+        if(Object.keys(queryParams).length){
+          url = `${url}?`;
+          Object.keys(queryParams).forEach(key => url = `${url}&${key}=${queryParams[key]}`);
+          url = url.replace('?&', '?');
+        }
       }
-      // console.log('petición fetch', url, config);
       return fetch(url, config)
         .then(CallBase._proccesResponse)
         .catch(CallBase._handleError);

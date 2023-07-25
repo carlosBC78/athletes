@@ -6,7 +6,7 @@
         <base-card>
             <div class="courses-list--controls">
                 <!-- <base-button mode="outline" @click="initCourseList()">Refrescar</base-button> -->
-                <base-button link :to="courseRegistrationLink">Registrar carrera</base-button>
+                <base-button v-if="isAthleteRegister" link :to="courseRegistrationLink">Registrar carrera</base-button>
                 <div>Total carreras: {{ numCourses }}</div>
             </div>
             <div v-if="isLoading">
@@ -37,8 +37,10 @@ export default {
     },
     computed: {
         coursesListComp(){
+            const athleteId = this.$route.params.id;
             const courseList = this.$store.getters['courses/getCourses'];
-            return courseList.filter(course => {
+            const courseListAthleteSelected = courseList.filter(course => course.athleteId === athleteId);
+            return courseListAthleteSelected.filter(course => {
                 if(this.activeFilters.fiveK && course.distance && course.distance === 5000){
                     return true;
                 }
@@ -78,6 +80,16 @@ export default {
             coursesListAux.sort((a,b) => b.time - a.time);//fecha más actual
             // coursesListAux.sort((a,b) => a.time - b.time);//fecha más antigua
             return coursesListAux;
+        },
+        isAthleteRegister(){
+            const userRegisterEmail = this.$store.getters['auth/getEmail'];
+            const athletesList = this.$store.getters['athletes/getAthletesList'];
+            const athleteRegister = athletesList.find(ath => ath.email === userRegisterEmail);
+            if(athleteRegister && athleteRegister !== null){
+                const athleteRegisterId = athleteRegister.id;
+                return athleteRegisterId === this.$route.params.id;
+            }
+            return false;
         }
     },
     data(){
@@ -107,14 +119,15 @@ export default {
             this.isLoading = true;
             const basePath = 'https://pj-vue-athlete-back-default-rtdb.europe-west1.firebasedatabase.app/';
             const athleteId = this.$route.params.id;
-            this.loadCoursesList(basePath, athleteId)
+            const token = this.$store.getters['auth/getToken'];
+            this.loadCoursesList(token, basePath, athleteId)
                 .finally(() => {
                     this.isLoading = false;
                 })
         },
         //recibo un objeto
         setFilter(filtro){
-        this.activeFilters = filtro;
+            this.activeFilters = filtro;
         },
     }
 

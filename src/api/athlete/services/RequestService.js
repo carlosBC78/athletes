@@ -10,6 +10,8 @@ export default class RequestService {
     /**
      * Servicio para registrar un mensaje para un athleta
      * @param {String} basePath
+     * @param {String} userId
+     * @param {String} body
      * @return {Promise} Promise
      * @memberof RequestService
      */
@@ -17,7 +19,7 @@ export default class RequestService {
         const url = `${basePath}requests/${userId}.json`;
         // console.log(url);
         const queryParams = {};
-        return api.post(/*tokenAPI,*/ url, queryParams, body)
+        return api.post(null, url, queryParams, body)
     }
     /**
      * Servicio para recuperar el listado de mensajes de un athleta
@@ -25,9 +27,9 @@ export default class RequestService {
      * @return {Promise} Promise
      * @memberof RequestService
      */
-    static loadRequestList(/*tokenAPI,*/ basePath, userId){
-        const url = `${basePath}requests/${userId}.json`;
-        return api.get(/*tokenAPI,*/ url, undefined);
+    static loadRequestList(tokenAPI, basePath){
+        const url = `${basePath}requests.json?auth=${tokenAPI}`;
+        return api.get(tokenAPI, url, undefined);
     }
 
 }

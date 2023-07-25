@@ -13,11 +13,11 @@ export default class AthleteService {
      * @return {Promise} Promise
      * @memberof AthleteService
      */
-    static registerAthlete(/*tokenAPI,*/ basePath, userId, body){
-        const url = `${basePath}athletes/${userId}.json`;
+    static registerAthlete(tokenAPI, basePath, body){
+        const url = `${basePath}athletes.json?auth=${tokenAPI}`;
         // console.log(url);
         const queryParams = {};
-        return api.put(/*tokenAPI,*/ url, queryParams, body)
+        return api.post(tokenAPI, url, queryParams, body)
     }
     /**
      * Servicio para recuperar el listado de athletas
@@ -25,9 +25,10 @@ export default class AthleteService {
      * @return {Promise} Promise
      * @memberof AthleteService
      */
-    static loadAthletesList(/*tokenAPI,*/ basePath){
-        const url = `${basePath}athletes.json`;
-        return api.get(/*tokenAPI,*/ url, undefined);
+    static loadAthletesList(tokenAPI, basePath/*, userId*/){
+        // const url = `${basePath}athletes/${userId}.json?auth=${tokenAPI}`;
+        const url = `${basePath}athletes.json?auth=${tokenAPI}`;
+        return api.get(tokenAPI, url, undefined);
     }
 
 }
