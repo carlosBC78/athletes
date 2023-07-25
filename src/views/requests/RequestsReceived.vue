@@ -12,7 +12,7 @@
             </div>
             <ul v-else-if="hasRequests && !isLoading">
                 <RequestItem v-for="req in receivedRequests" 
-                    :key="req.id" 
+                    :key="req.athleteId" 
                     :email="req.userEmail" 
                     :message="req.message">
                 </RequestItem>
@@ -53,11 +53,14 @@ export default {
         getRequestList(){
             //Llamada al servicio back para recuperar el listado de mensajes      
             const basePath = 'https://pj-vue-athlete-back-default-rtdb.europe-west1.firebasedatabase.app/';
-            const athleteId = this.$store.getters['getUserId'];
+            const token = this.$store.getters['auth/getToken'];
             this.isLoading = true;
-            this.loadRequestList(basePath, athleteId)
+            this.loadRequestList(token, basePath)
                 .catch(error => {
-                    this.error = error.message || '¡Algo ha salido mal!';
+                    const errorMsgObj = JSON.parse(error.message).data.error;
+                    this.error = errorMsgObj && errorMsgObj === 'Permission denied' ? 
+                        'No tiene permisos para ver los mensajes recibidos.' : 
+                        'Error al cargar los mensajes recibidos.';
                 })
                 .finally(() => {
                     this.isLoading = false;

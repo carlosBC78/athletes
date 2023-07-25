@@ -9,14 +9,49 @@
                 <li>
                     <router-link to="/athletes">Lista de atletas</router-link>
                 </li>
-                <li>
+                <li v-if="isLoggedIn">
                     <router-link to="/requests">Mensajes recibidos</router-link>
+                </li>
+                <li v-else>
+                  <router-link to="/auth">Entrar</router-link>
+                </li>
+                <li v-if="isLoggedIn">
+                  <base-button @click="logout">Salir</base-button>
                 </li>
             </ul>
         </nav>
     </header>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'HeaderApp',
+  computed: {
+    isLoggedIn(){
+      return this.$store.getters['auth/isAuthenticated'];
+    },
+  },
+  methods: {
+    logout(){
+      const logoutObj = {
+        token: null,
+        userId: null,
+        // tokenExpiration: null
+      }
+
+      //Borramos del local storage el token
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      // localStorage.removeItem('tokenExpiration');
+
+      this.$store.commit('auth/setUser', logoutObj);
+      this.$router.replace('/athletes');
+    }
+  }
+
+}
+</script>
 
 <style scoped>
 .header-app{

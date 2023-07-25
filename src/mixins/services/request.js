@@ -15,24 +15,35 @@ export default {
                      throw errorApp;
                     });
         },
-        loadRequestList(basePath, userId){
-            return requestService.loadRequestList(basePath, userId)
+        loadRequestList(tokenApi, basePath){
+            return requestService.loadRequestList(tokenApi, basePath)
                 .then(response => {
-                    const respData = response.data;
-                    let checkRequest = false;
-                    for(const key in respData){
-                        const request = {
-                            id: key,
-                            athleteId: userId,
-                            message: respData[key].message,
-                            userEmail: respData[key].userEmail
-                        };
-                        // console.log(respData[key].message);
-                        // console.log(respData[key].userEmail);
-                        checkRequest = this.$store.getters['requests/hasRequests'] && 
-                            this.$store.getters['requests/getRequests'].some(req => req.id === request.id);
-                        if(!checkRequest){
-                            this.$store.commit('requests/addRequest', request);
+                    const allMessages = response.data;
+                    // console.log('Mensajes recibidos', allMessages);
+                    
+                    const userRegisterEmail = this.$store.getters['auth/getEmail'];
+                    const athletesList = this.$store.getters['athletes/getAthletesList'];
+                    const athleteRegisterId = athletesList.find(ath => ath.email === userRegisterEmail).id;
+                    
+                    for(const athId in allMessages){
+                        let checkRequest = false;
+                        const athleteId = athId;
+                        const messages = allMessages[athleteId];
+                        for(const msg in messages){
+                            if(athleteRegisterId === athleteId){
+                                const request = {
+                                    id: msg,
+                                    athleteId: athleteId,
+                                    message: messages[msg].message,
+                                    userEmail: messages[msg].userEmail,
+                                };
+                                checkRequest = this.$store.getters['requests/hasRequests'] && 
+                                    this.$store.getters['requests/getRequests']
+                                    .some(req => req.id === msg);
+                                if(!checkRequest){
+                                    this.$store.commit('requests/addRequest', request);
+                                }
+                            }
                         }
                     }
                 })

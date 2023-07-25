@@ -18,8 +18,10 @@ const requestsStore = {
     },
     getters: {
         getRequests: (state, _, _2, rootGetters) => {
-            const userId = rootGetters.getUserId;
-            return state.requests.filter(req => req.athleteId === userId);
+            const email = rootGetters['auth/getEmail'];
+            const athletesList = rootGetters['athletes/getAthletesList'];
+            const athleteId = email ? athletesList.find(ath => ath.email === email).id : '';
+            return email ? state.requests.filter(req => req.athleteId === athleteId) : [];
         },
         hasRequests: (_, getters) => {
             return getters.getRequests && getters.getRequests.length > 0

@@ -28,7 +28,7 @@ export default {
     },
     methods: {
         saveData(data){
-            const userId = this.$route.params.id;
+            const athleteId = this.$route.params.id;
             const courseData = {
                 edition: data.edition,
                 name: data.name,
@@ -41,12 +41,13 @@ export default {
             //Llamada al servicio back para registrar el athleta
             const basePath = 'https://pj-vue-athlete-back-default-rtdb.europe-west1.firebasedatabase.app/'
             this.isLoading = true;
-            this.registerCourse(basePath, userId, courseData)
+            const token = this.$store.getters['auth/getToken'];
+            this.registerCourse(token, basePath, athleteId, courseData)
                 .then((response) => {
                     this.$store.commit('courses/addCourse', 
                         {
                             ...courseData,
-                            athleteId: userId,
+                            athleteId: athleteId,
                             id: response.data.name
                         });
                 })
@@ -56,7 +57,7 @@ export default {
                 // })
                 .finally(() => {
                     this.isLoading = false;
-                    this.$router.replace(`/athletes/${userId}/courses`);
+                    this.$router.replace(`/athletes/${athleteId}/courses`);
                 });
         },
         // handleError(){

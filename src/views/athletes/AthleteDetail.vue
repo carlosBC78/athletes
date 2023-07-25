@@ -15,7 +15,7 @@
                 <p>{{ description }}</p>
             </base-card>
         </section>
-        <section>
+        <section v-if="isRegister">
             <base-card>
                     <h3>Acceso al listado de carreras</h3>
                     <base-button link :to="courseListLink">Listado</base-button>
@@ -64,6 +64,9 @@ export default {
         },
         courseListLink(){
             return `${this.$route.path}/courses`;
+        },
+        isRegister(){
+            return !!this.$store.getters['auth/getUserId'];
         }
     },
     created(){

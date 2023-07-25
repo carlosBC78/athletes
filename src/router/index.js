@@ -11,7 +11,11 @@ import CoursesList from '../views/courses/CoursesList.vue';
 import CourseRegistration from '../views/courses/CourseRegistration.vue';
 import CourseDetail from '../views/courses/CourseDetail.vue';
 
+import UserAuth from '../views/auth/UserAuth.vue';
+
 import NotFound from '../views/NotFound.vue';
+
+import store from '../store/index';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -22,7 +26,17 @@ const router = createRouter({
         },
         {
             path: '/athletes', 
-            component: AthletesList
+            component: AthletesList,
+            // meta: {
+            //     requiresAuth: true
+            // }
+        },
+        {
+            path: '/auth', 
+            component: UserAuth,
+            meta: {
+                requiresUnAuth: true
+            }
         },
         {
             path: '/athletes/:id', 
@@ -51,17 +65,35 @@ const router = createRouter({
         },
         {
             path: '/register', 
-            component: AthleteRegistration
+            component: AthleteRegistration,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/requests', 
-            component: RequestsReceived
+            component: RequestsReceived,
+            meta: {
+                requiresAuth: true
+            }
         },
         {
             path: '/:notFound(.*)',
             component: NotFound
         }
     ]
+});
+
+router.beforeEach((to, _, next) => {
+    const isAuthenticated = store.getters['auth/isAuthenticated'];
+    if(to.meta.requiresAuth && !isAuthenticated){
+        next('/auth');
+    }else if(to.meta.requiresUnAuth && isAuthenticated){
+        next('/athletes');
+    }else{
+        next();
+    }
+
 });
 
 export default router;

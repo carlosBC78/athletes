@@ -13,11 +13,11 @@ export default class CourseService {
      * @return {Promise} Promise
      * @memberof CourseService
      */
-    static registerCourse(/*tokenAPI,*/ basePath, userId, body){
-        const url = `${basePath}courses/${userId}.json`;
+    static registerCourse(tokenAPI, basePath, userId, body){
+        const url = `${basePath}courses/${userId}.json?auth=${tokenAPI}`;
         // console.log(url);
         const queryParams = {};
-        return api.post(/*tokenAPI,*/ url, queryParams, body)
+        return api.post(tokenAPI, url, queryParams, body)
     }
     /**
      * Servicio para recuperar el listado de competiciones
@@ -25,9 +25,9 @@ export default class CourseService {
      * @return {Promise} Promise
      * @memberof CourseService
      */
-    static loadCoursesList(/*tokenAPI,*/ basePath, userId){
-        const url = `${basePath}courses/${userId}.json`;
-        return api.get(/*tokenAPI,*/ url, undefined);
+    static loadCoursesList(tokenAPI, basePath, userId){
+        const url = `${basePath}courses/${userId}.json?auth=${tokenAPI}`;
+        return api.get(tokenAPI, url, undefined);
     }
 
 }
