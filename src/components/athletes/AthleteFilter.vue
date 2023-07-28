@@ -51,6 +51,10 @@ h2 {
   margin: 8px 0;
 }
 
+.athlete-filter{
+    margin: 0px 10px;
+}
+
 .athlete-filter--option {
   margin-right: 4px;
 }
