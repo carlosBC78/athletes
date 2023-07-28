@@ -6,26 +6,28 @@
     <div>
       <AthleteFilter @change-filter="setFilter"></AthleteFilter>
     </div>
-    <base-card>
-      <div class="athletes-list--controls">
-        <base-button mode="outline" @click="initAthletesList(true)">Refrescar</base-button>
-        <base-button link to="/auth?redirect=register" v-if="!isLoggedIn && registerAthletes">Entrar para registrarse como atleta</base-button>
-        <base-button v-if="!isAthleteRegister && !isLoading && isLoggedIn && registerAthletes" link to="/register">Registrarse como atleta</base-button>
-      </div>
-      <div v-if="isLoading">
-        <base-spinner></base-spinner>
-      </div>
-      <ul v-else-if="hasAthletes">
-          <AthleteItem v-for="athlete in athletesListComp" :key="athlete.id" 
-            :id="athlete.id" 
-            :first-name="athlete.firstName"
-            :last-name="athlete.lastName"
-            :age="athlete.age"
-            :type-courses="athlete.typeCourses">
-          </AthleteItem>
-      </ul>
-      <p v-else>No hay atletas registrados.</p>      
+    <div class="athletes-list--container">
+      <base-card>
+        <div class="athletes-list--controls">
+          <base-button mode="outline" @click="initAthletesList(true)">Refrescar</base-button>
+          <base-button link to="/auth?redirect=register" v-if="!isLoggedIn && registerAthletes">Entrar para registrarse como atleta</base-button>
+          <base-button v-if="!isAthleteRegister && !isLoading && isLoggedIn && registerAthletes" link to="/register">Registrarse como atleta</base-button>
+        </div>
+        <div v-if="isLoading">
+          <base-spinner></base-spinner>
+        </div>
+        <ul v-else-if="hasAthletes">
+            <AthleteItem v-for="athlete in athletesListComp" :key="athlete.id" 
+              :id="athlete.id" 
+              :first-name="athlete.firstName"
+              :last-name="athlete.lastName"
+              :age="athlete.age"
+              :type-courses="athlete.typeCourses">
+            </AthleteItem>
+        </ul>
+        <p v-else>No hay atletas registrados.</p>      
     </base-card>
+    </div>
   </div>
 </template>
 
@@ -130,6 +132,10 @@ export default {
 .athletes-list{
   /* height: calc(100% - 90px); */
   width: 100%;
+}
+
+.athletes-list--container{
+  margin: 0px 10px;
 }
 
 ul{

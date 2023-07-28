@@ -94,6 +94,7 @@ header a {
 
 li {
   margin: 0 10px;
+  font-size: 15px;
 }
 
 h1 {
@@ -110,5 +111,33 @@ a:hover,
 a.router-link-active {
   border: 1px solid #f391e3;
 }
+
+@media (max-width: 620px){
+  li{
+    margin: 0px 5px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 515px){
+  li{
+    margin: 0px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 450px){
+  header li a{
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+
+  header h1 a{
+    font-size: 20px;
+    padding: 3px 0px;
+  }
+}
+
+
 
 </style>
