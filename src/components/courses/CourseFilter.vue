@@ -22,6 +22,10 @@
                 <input type="checkbox" id="other" checked @change="setFilter"/>
                 <label for="other">Otras</label>
             </span>
+            <div class="course-filter--search">
+                <label for="filter">Buscar</label>
+                <input type="text" id="filter" v-on:input="search"/>
+            </div>
         </base-card>
     </div>
 </template>
@@ -29,7 +33,7 @@
 <script>
 export default {
     name: 'CourseFilter',
-    emits: ['change-filter'],
+    emits: ['change-filter', 'advanced-search'],
     data(){
         return {
             filters: {
@@ -51,6 +55,9 @@ export default {
             };
             this.filters = updatedFilters;
             this.$emit('change-filter', this.filters);
+        },
+        search(event){
+            this.$emit('advanced-search', event.target.value);
         }
     }
 }
@@ -76,5 +83,19 @@ h2 {
 
 .course-filter--option label {
   font-weight: bold;
+}
+
+.course-filter--search{
+    margin: 8px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.course-filter--search label{
+    margin-right: 8px;
+}
+.course-filter--search input{
+    padding: 4px;
 }
 </style>
