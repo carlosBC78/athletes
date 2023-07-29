@@ -1,7 +1,7 @@
 <template>
     <div class="courses-list">
         <div>
-            <CourseFilter @change-filter="setFilter"></CourseFilter>
+            <CourseFilter @change-filter="setFilter" @advanced-search="onAdvancedSearch"></CourseFilter>
         </div>
         <base-card>
             <div class="courses-list--controls">
@@ -26,7 +26,8 @@
 <script>
 import CourseFilter from '../../components/courses/CourseFilter.vue';
 import CourseItem from '../../components/courses/CourseItem.vue';
-import courseService from '../../mixins/services/course.js'
+import courseService from '../../mixins/services/course.js';
+import Normalize from '../../helpers/Normalize';
 
 export default {
     name: 'CoursesList',
@@ -70,7 +71,7 @@ export default {
             return this.$store.getters['courses/hasCourses'];
         },
         numCourses(){
-            return this.coursesListComp.length;
+            return this.courseListOrder.length;
         },
         courseListOrder(){
             const coursesListAux = structuredClone(this.coursesListComp);
@@ -78,8 +79,12 @@ export default {
                 coursesListAux[index].time = (new Date(elem.courseDate)).getTime();    
             });
             coursesListAux.sort((a,b) => b.time - a.time);//fecha más actual
-            // coursesListAux.sort((a,b) => a.time - b.time);//fecha más antigua
-            return coursesListAux;
+            
+            return this.filter !== '' ? 
+                coursesListAux.filter(course => 
+                    Normalize.removeAccents(course.name.toLowerCase()).includes(this.filter)) 
+                : coursesListAux;
+            
         },
         isAthleteRegister(){
             const userRegisterEmail = this.$store.getters['auth/getEmail'];
@@ -102,7 +107,8 @@ export default {
                 halfMarathon: true,
                 other: true
             },
-            isLoading: false
+            isLoading: false,
+            filter: ''
         }
     },
     created(){
@@ -129,6 +135,28 @@ export default {
         setFilter(filtro){
             this.activeFilters = filtro;
         },
+        onAdvancedSearch(text){
+            this.filter = Normalize.removeAccents(text.trim().toLowerCase());
+            
+                        //Expresión regular
+                        // .normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+                        //Reemplazar todos los caractéres especiales
+                        // .replace(new RegExp("\\s", 'g'),"")
+                        // .replace(new RegExp("[àáâãäå]", 'g'),"a")
+                        // .replace(new RegExp("æ", 'g'),"ae")
+                        // .replace(new RegExp("ç", 'g'),"c")
+                        // .replace(new RegExp("[èéêë]", 'g'),"e")
+                        // .replace(new RegExp("[ìíîï]", 'g'),"i")
+                        // .replace(new RegExp("ñ", 'g'),"n")                       
+                        // .replace(new RegExp("[òóôõö]", 'g'),"o")
+                        // .replace(new RegExp("œ", 'g'),"oe")
+                        // .replace(new RegExp("[ùúûü]", 'g'),"u")
+                        // .replace(new RegExp("[ýÿ]", 'g'),"y")
+                        // .replace(new RegExp("\\W", 'g'),"");
+                        
+                        // console.log('normalizado', this.filter);
+        }
     }
 
 }
